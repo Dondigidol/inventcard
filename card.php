@@ -3,7 +3,7 @@ session_start();
 if (!isset($_SESSION["ldap"])){
 	header("location: index.php");
 }
-$rows=24;
+$rows=20;
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html>
@@ -18,73 +18,73 @@ $rows=24;
 	<script type= "text/javascript" src= "js/card.js"></script>	
 	<script type= "text/javascript" src= "js/JsBarcode.all.min.js"></script>	
 	<script type= "text/javascript" src= "js/functions.js"></script>
-	<div id= "header" name= "header">
+	<div id= "header" name= "header">		
+		<div id= "triangle" name="triangle"></div>
+		<div id= "logo" name="logo"></div>
 		<div id="buttonsBlock">			
 			<div id= "printButton" onclick = "window.print()" class = "menuButtons"></div>
 		</div>
-		<div id= "triangle" name="triangle"></div>
-		<div id= "logo" name="logo"></div>
-		<a href= "index.php" onclick= "logout();" style="position: absolute; right: 1em; top: 0.5em;">Выйти</a>
+		<a href= "index.php" id="logout" onclick= "logout();" >Выйти</a>
 	</div>
-<div id= "cardcont" name= "cardcont">
-	<div id= "card" name= "card">
-		<div id="title">Карточка предподсчета - Инвентаризация</div>
-		<table class="tables" id="head_table" width="80%">
-			<tr>
-				<td width="30%">Дата подготовки:</td>
-				<td width="30%"><?php echo Date("d.m.Y");?></td>
-				<td width="20%" class="head_table_sep">№ Адреса:</td>
-				<td width="20%"><input type="text"/></td>
-			</tr>
-			<tr class="tablescont">
-				<td>Сотрудник:</td>
-				<td><?php echo $_SESSION["username"];?></td>
-				<td class="head_table_sep">№ Листа:</td>
-				<td><input type="text"/></td>
-			</tr>
-			<tr class="tablescont">
-				<td>Магазин:</td>
-				<td><?php echo $_SESSION["shop"]?></td>
-				<td class="head_table_sep">№ Коробки:</td>
-				<td><input type="text"/></td>
-			</tr>
-		</table>
-		<br>
-		<table class= "tables" width= "95%">
-			<tr class = "tableshead">
-				<td width= "5%">№</td><td width= "15%">код ЛМ</td><td width= "20%">код EAN</td><td width= "50%">наименование</td><td width= "10%">кол-во</td>
-			</tr>
+	<div id= "cardcont" name= "cardcont">
+		<div id= "card" name= "card">
+			<div id="title">Карточка предподсчета - Инвентаризация</div>
+			<table class="tables" id="head_table" width="80%">
+				<tr>
+					<td width="30%">Дата подготовки:</td>
+					<td width="30%"><?php echo Date("d.m.Y");?></td>
+					<td width="20%" class="head_table_sep">№ Адреса:</td>
+					<td width="20%"><input type="text"/></td>
+				</tr>
+				<tr class="tablescont">
+					<td>Сотрудник:</td>
+					<td><?php echo $_SESSION["username"];?></td>
+					<td class="head_table_sep">№ Листа:</td>
+					<td><input type="text"/></td>
+				</tr>
+				<tr class="tablescont">
+					<td>Магазин:</td>
+					<td><?php echo $_SESSION["shop"]?></td>
+					<td class="head_table_sep">№ Коробки:</td>
+					<td><input type="text"/></td>
+				</tr>
+			</table>
+			<br>
+			<table class= "tables" width= "95%">
+				<tr class = "tableshead">
+					<td width= "5%">№</td><td width= "15%">код ЛМ</td><td width= "23%">код EAN</td><td width= "47%">наименование</td><td width= "10%">кол-во</td>
+				</tr>
+				
+				<?php
+					$tab = 0;
+					for($i = 0; $i<$rows; $i++){
+						
+						echo 	("<tr class = 'tablescont2'>
+									<td>" . ($i + 1) . "</td>
+									<td>
+										<div id='lm_" . $i . "_label' class='lmLabel' onclick='editLm(" . $i . ");'></div>
+										<input type='number' id= 'lm_" . $i . "'  class='tab_article_input' onchange= 'getItemByLm(this.value, " . $i . ");' onfocusout = 'lostFocus(" . $i . ");' tabindex='" . ($tab + 1) . "'/>
+									</td>
+									<td>
+										<svg id='barcode_" . $i . "' class='barcode'></svg>
+										<div id='sku_" . $i . "_label' class='skuLabel' onclick='editSku(" . $i . ");'></div>
+										<input type='number' id= 'sku_" . $i . "'  class='tab_article_input' onchange= 'getItemBySku(this.value, " . $i . ");' onkeyup = 'nextRow(event," . $i. ");' onfocusout = 'lostFocus(" . $i . ");' tabindex='" . ($tab + 2) . "'/>
+									</td>
+									<td>
+										<div id = 'name_" . $i . "_label'></div>
+									</td>
+									<td>
+										<input type='number' id= 'kol_" . $i . "' tabindex='" . ($tab + 3) . "' onfocusout = 'lostFocus(" . $i . ");'/>
+										<div id = 'clear_" . $i . "' class = 'clearButton' onclick='clearItem(" . $i . ")'></div>
+									</td>
+								</tr>");
+						$tab = $tab + 3;
+					}			
+				?>
 			
-			<?php
-				$tab = 0;
-				for($i = 0; $i<$rows; $i++){
-					
-					echo 	("<tr class = 'tablescont2'>
-								<td>" . ($i + 1) . "</td>
-								<td>
-									<div id='lm_" . $i . "_label' class='lmLabel' onclick='editLm(" . $i . ");'></div>
-									<input type='number' id= 'lm_" . $i . "'  class='tab_article_input' onchange= 'getItemByLm(this.value, " . $i . ");' onfocusout = 'lostFocus(" . $i . ");' tabindex='" . ($tab + 1) . "'/>
-								</td>
-								<td>
-									<svg id='barcode_" . $i . "' class='barcode'></svg>
-									<div id='sku_" . $i . "_label' class='skuLabel' onclick='editSku(" . $i . ");'></div>
-									<input type='number' id= 'sku_" . $i . "'  class='tab_article_input' onchange= 'getItemBySku(this.value, " . $i . ");' onkeyup = 'nextRow(event," . $i. ");' onfocusout = 'lostFocus(" . $i . ");' tabindex='" . ($tab + 2) . "'/>
-								</td>
-								<td>
-									<div id = 'name_" . $i . "_label'></div>
-								</td>
-								<td>
-									<input type='number' id= 'kol_" . $i . "' tabindex='" . ($tab + 3) . "' onfocusout = 'lostFocus(" . $i . ");'/>
-									<div id = 'clear_" . $i . "' class = 'clearButton' onclick='clearItem(" . $i . ")'></div>
-								</td>
-							</tr>");
-					$tab = $tab + 3;
-				}			
-			?>
-		
-		</table>	
+			</table>	
+		</div>
 	</div>
-</div>
 <div id = "errorCont"></div>
 
 

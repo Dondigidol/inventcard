@@ -8,13 +8,16 @@ body {
 }
 
 #header a{
-	z-index:999;
+	display: table-cell;
+	vertical-align: middle;
+	text-align: right;
+	padding-right: 1em;
 }
 
 #buttonsBlock {
 	position: absolute;
-	top: 3em;
-	left: calc(50% + 22em);
+	top: 4.5em;
+	left: 3.5em;
 }
 
 .menuButtons {
@@ -23,7 +26,6 @@ body {
 }
 
 #printButton{
-	margin-top:4em;
 	background: url(../img/print.png) no-repeat;
 	background-size: auto 100%;
 }
@@ -37,7 +39,8 @@ body {
 #cardcont {
 	display: block;
 	padding: 2em 0 2em; 
-	overflow-y: auto;
+	height: calc(100vh - 8em);
+	overflow-y:auto;
 }
 
 #card {
@@ -180,10 +183,6 @@ body {
 
 @media print{
 
-	#header {
-		display: none;
-	}
-	
 	#cardcont {
 	display: block;
 	margin-top: 0em;

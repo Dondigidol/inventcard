@@ -7,8 +7,9 @@
 }
 
 #header {
+	display: table;
 	background: rgb(70,184,47);
-	height: 2em;
+	height: 3em;
 	width: 100%;
 	border-bottom: 1px solid rgba(55,143,37, 0.5);
 	z-index:998;
@@ -16,8 +17,8 @@
 
 #triangle {
 	position: absolute;
-	top: 0;
-	right: 60px;
+	top: 0.6em;
+	left: 2.5em;
 	width: 0;
 	height: 0;
 	border-left: 2.5em solid transparent;
@@ -28,11 +29,23 @@
 
 #logo {
 	position: absolute;
-	top: 0;
-	right: 20px;
+	top: 0.8em;
+	left: 2.5em;
 	background-image: url(../img/logo.png);
 	background-size: 100% 100%;
-	width: 10em;
-	height: 6.5em;
+	width: 5em;
+	height: 3.2em;
 	z-index:997;
+}
+
+@media print{
+
+	#header {
+		display: none;
+	}
+	
+	#triangle {
+		display : none;
+	}
+	
 }
