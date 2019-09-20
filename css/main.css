@@ -1,0 +1,38 @@
+* {
+	font-family: Geneva, Arial, Helvetica, sans-serif;
+}
+
+:root {
+	--main-bg-color: #f0f0f0;
+}
+
+#header {
+	background: rgb(70,184,47);
+	height: 2em;
+	width: 100%;
+	border-bottom: 1px solid rgba(55,143,37, 0.5);
+	z-index:998;
+}
+
+#triangle {
+	position: absolute;
+	top: 0;
+	right: 60px;
+	width: 0;
+	height: 0;
+	border-left: 2.5em solid transparent;
+	border-right: 2.5em solid transparent;
+	border-bottom: 2.5em solid var(--main-bg-color);
+	z-index:996;
+}
+
+#logo {
+	position: absolute;
+	top: 0;
+	right: 20px;
+	background-image: url(../img/logo.png);
+	background-size: 100% 100%;
+	width: 10em;
+	height: 6.5em;
+	z-index:997;
+}

@@ -1,0 +1,4 @@
+<FilesMatch "connect.php|config.ini|.htaccess">
+ Order Deny,Allow
+ Deny from all
+ </FilesMatch>
