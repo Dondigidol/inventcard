@@ -71,6 +71,7 @@ body {
 	text-align: center;
 	font-size: 1em;
 	margin: 0 auto;
+	-moz-appearance:textfield;
 }
 
 .tab_article_input{
@@ -131,6 +132,10 @@ body {
 	height: 1.8em;
 }
 
+#head_table td{
+	padding-left: 5px;
+}
+
 .head_table_sep{
 	border-left: 1px solid black;
 }
@@ -138,11 +143,26 @@ body {
 
 .tablescont2 td{
 	border: 1px solid black;
-	font-size: 1em;
-	height: 2em;
+	font-size: 0.8em;
+	height: 3.7em;
 	text-align:center;
 	position: relative;
 }
+
+.selectors{
+	width:80%;
+	border: none;
+	font-size: 1em;
+	text-align: center;
+	background-color: transparent;
+	margin-top: calc(0.9em - 0.5em);
+	outline: none;
+	text-align-last:center;
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	appearance: none;	
+}
+
 
 #errorCont{
 	position: absolute;

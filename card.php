@@ -3,7 +3,7 @@ session_start();
 if (!isset($_SESSION["ldap"])){
 	header("location: index.php");
 }
-$rows=20;
+$rows=17;
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html>
@@ -29,22 +29,41 @@ $rows=20;
 	<div id= "cardcont" name= "cardcont">
 		<div id= "card" name= "card">
 			<div id="title">Карточка предподсчета - Инвентаризация</div>
-			<table class="tables" id="head_table" width="80%">
+			<table class="tables" id="head_table" width="90%">
 				<tr>
-					<td width="30%">Дата подготовки:</td>
-					<td width="30%"><?php echo Date("d.m.Y");?></td>
-					<td width="20%" class="head_table_sep">№ Адреса:</td>
-					<td width="20%"><input type="text"/></td>
+					<td width="70%">Дата подготовки: <?php echo Date("d.m.Y");?></td>
+					<td width="20%" class="head_table_sep">Магазин:</td>
+					<td width="10%" style="text-align: center;"><?php echo $_SESSION["shop"]?></td>
 				</tr>
 				<tr class="tablescont">
-					<td>Сотрудник:</td>
-					<td><?php echo $_SESSION["username"];?></td>
+					<td>Отдел: 
+						<select class="selectors" style="width: 2em; text-align: center;">
+							<option>1</option>
+							<option>2</option>
+							<option>3</option>
+							<option>4</option>
+							<option>5</option>
+							<option>6</option>
+							<option>7</option>
+							<option>8</option>
+							<option>9</option>
+							<option>10</option>
+							<option>11</option>
+							<option>12</option>
+							<option>13</option>
+							<option>14</option>
+							<option>15</option>
+						</select>
+					<td class="head_table_sep">№ Адреса:</td>
+					<td><input type="text"/></td>
+				</tr>
+				<tr class="tablescont">
+					<td>Сотрудник: <?php echo $_SESSION["username"];?></td>
 					<td class="head_table_sep">№ Листа:</td>
 					<td><input type="text"/></td>
 				</tr>
 				<tr class="tablescont">
-					<td>Магазин:</td>
-					<td><?php echo $_SESSION["shop"]?></td>
+					<td>Контролирующий:</td>
 					<td class="head_table_sep">№ Коробки:</td>
 					<td><input type="text"/></td>
 				</tr>
@@ -52,11 +71,10 @@ $rows=20;
 			<br>
 			<table class= "tables" width= "95%">
 				<tr class = "tableshead">
-					<td width= "5%">№</td><td width= "15%">код ЛМ</td><td width= "23%">код EAN</td><td width= "47%">наименование</td><td width= "10%">кол-во</td>
+					<td width= "5%">№</td><td width= "15%">код ЛМ</td><td width= "23%">код EAN</td><td width= "37%">наименование</td><td width= "10%">кол-во</td><td width="10%">Тип</td>
 				</tr>
 				
 				<?php
-					$tab = 0;
 					for($i = 0; $i<$rows; $i++){
 						
 						echo 	("<tr class = 'tablescont2'>
@@ -75,8 +93,16 @@ $rows=20;
 									</td>
 									<td>
 										<input type='number' id= 'kol_" . $i . "' tabindex='" . ($tab + 3) . "' onfocusout = 'lostFocus(" . $i . ");'/>
+										
+									</td>
+									<td>
+										<select class='selectors' id='type_" . $i . "' onchange='lostFocus(" . $i . ");' tabindex='" . ($tab + 4) . "'>
+											<option value='empty' selected></option>
+											<option value=''>A</option>					
+										</select>
 										<div id = 'clear_" . $i . "' class = 'clearButton' onclick='clearItem(" . $i . ")'></div>
 									</td>
+									
 								</tr>");
 						$tab = $tab + 3;
 					}			
@@ -108,7 +134,9 @@ $rows=20;
 	var skuInput = [];
 	var barcode = [];
 	var kolInput = [];
+	var typeSelection = [];
 	var nameLabel = [];
+	
 	
 	function loadVariables(){
 		<?php
@@ -119,6 +147,7 @@ $rows=20;
 				echo "skuInput[" . $i . "] = document.getElementById('sku_" . $i . "');";
 				echo "barcode[" . $i . "] = document.getElementById('barcode_" . $i . "');";
 				echo "kolInput[" . $i . "] = document.getElementById('kol_" . $i . "');";
+				echo "typeSelection[". $i . "] = document.getElementById('type_" .$i. "');";
 				echo "nameLabel[" . $i . "] = document.getElementById('name_" . $i . "_label');";
 			}
 		?>
@@ -221,7 +250,7 @@ $rows=20;
 		skuLabel[pos].style.visibility = "visible";
 		lmLabel[pos].style.visibility = "visible";
 		barcode[pos].style.visibility = "visible";
-		if (skuInput[pos].value != "" || lmInput[pos].value != "" || kolInput[pos].value != ""){
+		if (skuInput[pos].value != "" || lmInput[pos].value != "" || kolInput[pos].value != "" || typeSelection[pos].value != "empty"){
 			document.getElementById("clear_" + pos).style.display="block";
 		} else{
 			document.getElementById("clear_" + pos).style.display="none";
@@ -239,6 +268,7 @@ $rows=20;
 		lmInput[pos].value = "";		
 		skuInput[pos].value = "";
 		kolInput[pos].value = "";
+		typeSelection[pos].value = "empty";
 		lmLabel[pos].innerHTML = "";
 		skuLabel[pos].innerHTML = "";
 		barcode[pos].innerHTML="";
