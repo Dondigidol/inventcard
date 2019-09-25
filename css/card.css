@@ -64,7 +64,7 @@ body {
 	text-align: center;
 }
 
-.tables input[type=number], input[type=text]{
+.tables input[type=number], input[type=text], select{
 	border: 0px solid green;
 	width:90%;
 	height: 80%;
