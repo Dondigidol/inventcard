@@ -137,37 +137,25 @@ class postgre_connection{
 		
 	}
 	
-	function sql_query($query_str)
-	{
-		if (isset($this->conn))
-		{
-			try 
-			{					
-				ini_set('max_execution_time', 2000);
-				$arr = pg_query($this->conn, $query_str);
-				$query_type = explode(' ', $query_str);
-				if (strtoupper($query_type[0]) == 'SELECT')
-				{
-					$result = array();
-					while($val = pg_fetch_array($arr))
-					{
-						array_push($result, $val);
-					}		
-					return $result;
-				}					
+	function getItem($item){
+		if (is_numeric($item) && (strlen($item)==8 || strlen($item)==13)){
+			switch(strlen($item)){
+				case 8: 
+					$query_str = ("select item, item_parent, short_desc from rms_p009qtzb_rms_ods.item_master where item_parent='". $item ."' and is_actual='1' limit 1");
+					break;
+				case 13:
+					$query_str = ("select item, item_parent, short_desc from rms_p009qtzb_rms_ods.item_master where item='". $item ."' and is_actual='1' limit 1");
+					break;
 			}
-			catch (Exception $e)
-			{
-				echo 'Ошибка при выполнении запроса' . $e->getmessage() . '\n';
-			} finally {
-				pg_close();
+			$arr = pg_query($this->conn, $query_str);
+			$result = array();
+			while($val = pg_fetch_array($arr)){
+				array_push($result, $val);
 			}
+			return $result;			
 		}
-	}
-	
+	}	
 }
-
-
 
 function connect_to_ldap($user, $userPW, $ini_file)
 {
