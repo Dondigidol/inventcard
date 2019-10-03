@@ -1,6 +1,6 @@
 // Нажатие кнопки логина =================
 function loginbtn_clk(){	
-	$("#alerts").html('');
+	$("#alerts").modal('hide');
 	var ldap = $("#login").val();
 	var ldappw = $("#password").val();
 	if ((ldap != "") && (ldappw != "")){
@@ -16,14 +16,15 @@ function loginbtn_clk(){
 				}
 				else
 				{
-					$("#alerts").css("visibility", "visible");
-					$("#alerts").html(data);
+					$("#alerts").modal("show");
+					$("#alerts_message").text(data);
 				}
 			}
 		});
 	} else {
-		$("#alerts").css("visibility", "visible");
-		$("#alerts").html("Внимание! Заполните все поля.");
+		$("#alerts").modal("show");
+		$("#alerts_message").text("Внимание! Заполните все поля.");
+		
 	}
 }
 //----------------------------------------
