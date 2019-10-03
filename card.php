@@ -22,7 +22,8 @@ $rows=16;
 		<div id= "triangle" name="triangle"></div>
 		<div id= "logo" name="logo"></div>
 		<div id="buttonsBlock">			
-			<div id= "printButton" onclick = "window.print()" class = "menuButtons"></div>
+			<div id= "printButton" onclick = "window.print();" class = "menuButtons" title="Распечатать"></div>
+			<div id= "clearButton" onclick = "window.location.reload();" class = "menuButtons" title="Очистить все поля"></div>
 		</div>
 		<a href= "index.php" id="logout" onclick= "logout();" >Выйти</a>
 	</div>
