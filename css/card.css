@@ -17,13 +17,15 @@ body {
 #buttonsBlock {
 	position: absolute;
 	top: 4.5em;
-	left: 3.5em;
+	left: 3.7em;
 }
 
 .menuButtons {
 	margin-bottom:1em;
-	width: 3em;
-	height: 3em;
+	width: 2.5em;
+	height: 2.5em;
+	min-height: 1em;
+	min-width: 1em;
 }
 
 #printButton{
@@ -71,13 +73,19 @@ body {
 }
 
 .tables input[type=number], input[type=text], select{
-	border: 0px solid green;
-	width:90%;
+	width:95%;
 	height: 80%;
 	text-align: center;
 	font-size: 1em;
 	margin: 0 auto;
 	-moz-appearance:textfield;
+	border: none;
+}
+
+.header_inputs{
+	background: rgba(255,0,0,0.3);
+	padding: 0.1em 0;
+	outline: none;
 }
 
 .tab_article_input{
@@ -85,7 +93,6 @@ body {
 }
 
 .lmLabel{
-	border: 0px solid red;
 	position: absolute;
 	width: 100%; 
 	height: 50%;
@@ -96,7 +103,6 @@ body {
 }
 
 .skuLabel{
-	border: 0px solid red;
 	position: absolute;
 	width: 100%; 
 	height: 100%;
@@ -181,7 +187,7 @@ body {
 }
 
 #otdelCont{
-	padding: 0.2em 0;
+	padding: 0.1em 0;
 }
 
 #otdels_select{

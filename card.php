@@ -33,8 +33,8 @@ $rows=16;
 			<table class="tables" id="head_table" width="90%">
 				<tr>
 					<td width="60%">Дата подготовки: <?php echo Date("d.m.Y");?></td>
-					<td width="20%" class="head_table_sep">Магазин:</td>
-					<td width="20%" style="text-align: center;"><?php echo $_SESSION["shop"]?></td>
+					<td width="17%" class="head_table_sep">Магазин:</td>
+					<td width="23%" style="text-align: center;"><?php echo $_SESSION["shop"];?></td>
 				</tr>
 				<tr class="tablescont">
 					<td><span>Отдел:</span>
@@ -57,17 +57,17 @@ $rows=16;
 							<option>15</option>
 						</select></span>
 					<td class="head_table_sep">№ Адреса:</td>
-					<td><input type="text"/></td>
+					<td><input type="text" id="addressNumber" class="header_inputs" onkeyup="checkInputs(this.id);"/></td>
 				</tr>
 				<tr class="tablescont">
 					<td>Сотрудник: <?php echo $_SESSION["username"];?></td>
 					<td class="head_table_sep">№ Листа:</td>
-					<td><input type="text"/></td>
+					<td><input type="text" id="pageNumber"class="header_inputs" onkeyup="checkInputs(this.id);"/></td>
 				</tr>
 				<tr class="tablescont">
 					<td>Контролирующий:</td>
 					<td class="head_table_sep">№ Коробки:</td>
-					<td><input type="text"/></td>
+					<td><input type="text" id="boxNumber" class="header_inputs" onkeyup="checkInputs(this.id);"/></td>
 				</tr>
 			</table>
 			<br>
