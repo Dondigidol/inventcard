@@ -32,9 +32,9 @@ $rows=16;
 			<div id="title">Карточка предподсчета - Инвентаризация</div>
 			<table class="tables" id="head_table" width="90%">
 				<tr>
-					<td width="70%">Дата подготовки: <?php echo Date("d.m.Y");?></td>
+					<td width="60%">Дата подготовки: <?php echo Date("d.m.Y");?></td>
 					<td width="20%" class="head_table_sep">Магазин:</td>
-					<td width="10%" style="text-align: center;"><?php echo $_SESSION["shop"]?></td>
+					<td width="20%" style="text-align: center;"><?php echo $_SESSION["shop"]?></td>
 				</tr>
 				<tr class="tablescont">
 					<td><span>Отдел:</span>
