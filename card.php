@@ -37,8 +37,9 @@ $rows=16;
 					<td width="10%" style="text-align: center;"><?php echo $_SESSION["shop"]?></td>
 				</tr>
 				<tr class="tablescont">
-					<td>Отдел: 
-						<select class="selectors" style="width: 2em; text-align: center;">
+					<td><span>Отдел:</span>
+						<span id="otdelCont"><select id="otdels_select" onchange="otdelChange();">
+							<option></option>
 							<option>1</option>
 							<option>2</option>
 							<option>3</option>
@@ -54,7 +55,7 @@ $rows=16;
 							<option>13</option>
 							<option>14</option>
 							<option>15</option>
-						</select>
+						</select></span>
 					<td class="head_table_sep">№ Адреса:</td>
 					<td><input type="text"/></td>
 				</tr>
@@ -72,7 +73,7 @@ $rows=16;
 			<br>
 			<table class= "tables" width= "95%">
 				<tr class = "tableshead">
-					<td width= "5%">№</td><td width= "15%">код ЛМ</td><td width= "23%">код EAN</td><td width= "37%">наименование</td><td width= "10%">кол-во</td><td width="10%">Тип</td>
+					<td width= "5%">№</td><td width= "23%">код EAN</td><td width= "15%">код ЛМ</td><td width= "37%">наименование</td><td width= "10%">кол-во</td><td width="10%">Тип</td>
 				</tr>
 				
 				<?php
@@ -81,13 +82,13 @@ $rows=16;
 						echo 	("<tr class = 'tablescont2'>
 									<td>" . ($i + 1) . "</td>
 									<td>
-										<div id='lm_" . $i . "_label' class='lmLabel' onclick='editLm(" . $i . ");'></div>
-										<input type='number' id= 'lm_" . $i . "'  class='tab_article_input' onchange= 'getItemByLm(this.value, " . $i . ");' onfocusout = 'lostFocus(" . $i . ");' tabindex='" . ($tab + 1) . "'/>
-									</td>
-									<td>
 										<svg id='barcode_" . $i . "' class='barcode'></svg>
 										<div id='sku_" . $i . "_label' class='skuLabel' onclick='editSku(" . $i . ");'></div>
-										<input type='number' id= 'sku_" . $i . "'  class='tab_article_input' onchange= 'getItemBySku(this.value, " . $i . ");' onkeyup = 'nextRow(event," . $i. ");' onfocusout = 'lostFocus(" . $i . ");' tabindex='" . ($tab + 2) . "'/>
+										<input type='number' id= 'sku_" . $i . "'  class='tab_article_input' onchange= 'getItemBySku(this.value, " . $i . ");' onkeyup = 'nextRow(event," . $i. ", " .$rows. ");' onfocusout = 'lostFocus(" . $i . ");' tabindex='" . ($tab + 2) . "'/>
+									</td>
+									<td>
+										<div id='lm_" . $i . "_label' class='lmLabel' onclick='editLm(" . $i . ");'></div>
+										<input type='number' id= 'lm_" . $i . "'  class='tab_article_input' onchange= 'getItemByLm(this.value, " . $i . ");' onfocusout = 'lostFocus(" . $i . ");' tabindex='" . ($tab + 1) . "'/>
 									</td>
 									<td>
 										<div id = 'name_" . $i . "_label'></div>
@@ -116,19 +117,13 @@ $rows=16;
 
 
 <script>
-
-	document.onready = function(){
-		otdelChange();
-	}
-
 	document.onclick = function(e){
 		<?php
 			if (!isset($_SESSION["ldap"])){
 				header("location: index.php");
 			}
 		?>
-	}
-	
+	}	
 	var lmLabel = [];
 	var lmInput = [];
 	var skuLabel = [];
@@ -138,6 +133,7 @@ $rows=16;
 	var typeSelection = [];
 	var nameLabel = [];
 	
+	window.addEventListener('load', loadVariables, false);
 	
 	function loadVariables(){
 		<?php
@@ -154,140 +150,7 @@ $rows=16;
 		?>
 	}
 	
-	function otdelChange(){
-		if (document.getElementById("otdels_select")){
-			if (document.getElementById("otdels_select").value == ""){
-				document.getElementById("otdelCont").style.background = "rgba(255,0,0,0.3)";
-			} else {
-				document.getElementById("otdelCont").style.background = "transparent";
-			}	
-		}
-			
-	}
 	
-	function nextRow(event,row){
-		if(event.keyCode==13){
-			if (row != <?php echo $rows-1;?>){
-				editSku(row+1);
-			} else {
-				document.getElementById("sku_" + row).blur();
-			}
-		}
-	}
-	
-	window.addEventListener('load', loadVariables, false);
-
-	
-	function getItemBySku(sku, pos){
-		skuLabel[pos].innerHTML="";
-		barcode[pos].innerHTML="";
-		$.ajax({
-			type: "POST",
-			url: "aj/getdata.php",
-			data: {"sku": sku},
-			success: function(data){
-				data = data.split("|");
-				if (data[0] == ""){
-					data[0] = sku;
-				}
-				lmLabel[pos].innerHTML = data[1];
-				skuLabel[pos].innerHTML = data[0];
-				if (data[0] != "") {
-					JsBarcode("#barcode_" + pos, data[0], {
-						width: 1.5,
-						height: 30,
-						font: "Helvetica"					
-					});						
-				}
-				nameLabel[pos].innerHTML = data[2];				
-			}
-		});
-	}
-	
-	function getItemByLm(lm, pos){
-		lmLabel[pos].innerHTML="";
-		barcode[pos].innerHTML="";
-		$.ajax({
-			type: "POST",
-			url: "aj/getdata.php",
-			data: {"lm": lm},
-			success: function(data){
-				data = data.split("|");
-				if (data[1] == ""){
-					data[1] = lm;
-				}
-				lmLabel[pos].innerHTML = data[1];
-				skuLabel[pos].innerHTML = data[0];
-				if (data[0] != "") {
-					JsBarcode("#barcode_" + pos, data[0], {
-						width: 1.5,
-						height: 30,
-						font: "Helvetica"					
-					});						
-				}			
-				nameLabel[pos].innerHTML = data[2];				
-			}
-		});
-	}
-	
-	function editLm(pos){
-		lmInput[pos].value = lmLabel[pos].innerHTML;		
-		lmLabel[pos].style.visibility = "hidden";
-		lmInput[pos].style.visibility = "visible";
-		lmInput[pos].focus();
-	}
-	
-	function editSku(pos){
-		skuInput[pos].value = skuLabel[pos].innerHTML;
-		skuLabel[pos].style.visibility = "hidden";
-		barcode[pos].style.visibility = "hidden";
-		skuInput[pos].style.visibility = "visible";
-		skuInput[pos].focus();
-	}
-	
-	function lostFocus(pos){
-		skuInput[pos].style.visibility = "hidden";
-		lmInput[pos].style.visibility = "hidden";
-		skuLabel[pos].style.visibility = "visible";
-		lmLabel[pos].style.visibility = "visible";
-		barcode[pos].style.visibility = "visible";
-		if (skuInput[pos].value != "" || lmInput[pos].value != "" || kolInput[pos].value != "" || typeSelection[pos].value != "empty"){
-			document.getElementById("clear_" + pos).style.display="block";
-		} else{
-			document.getElementById("clear_" + pos).style.display="none";
-		}
-		
-		if ((skuInput[pos].value != "" || lmInput[pos].value != "") && kolInput[pos].value == ""){
-			kolInput[pos].style.background="rgba(255,0,0,0.3)";
-		} else {
-			kolInput[pos].style.background="transparent";
-		}
-		
-	}
-	
-	function clearItem(pos){
-		lmInput[pos].value = "";		
-		skuInput[pos].value = "";
-		kolInput[pos].value = "";
-		typeSelection[pos].value = "empty";
-		lmLabel[pos].innerHTML = "";
-		skuLabel[pos].innerHTML = "";
-		barcode[pos].innerHTML="";
-		nameLabel[pos].innerHTML="";
-		kolInput[pos].style.background="transparent";
-		document.getElementById("clear_" + pos).style.display="none";
-		
-	}
-	
-	function checkKol(){
-		for (i=0; i<=2; i++){
-			if ((lmLabel[i].innerHTML != "" || skuLabel[i].innerHTML != "") && kolInput[i].value == ""){
-				kolInput[i].style.background="rgba(255,0,0,0.3)";
-			} else {
-				kolInput[i].style.background="transparent";
-			}
-		}		
-	}
 	
 </script>
 </body>

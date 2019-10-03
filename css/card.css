@@ -181,30 +181,21 @@ body {
 }
 
 #otdelCont{
-	width:100%;
-	height:100%;
-	background-color: red;	
+	padding: 0.2em 0;
 }
 
 #otdels_select{
-	width:80%;
+	width:5em;
 	border: none;
-	font-weight: bold;
 	font-size: 1em;
-	text-align: center;
 	background-color: transparent;
-	margin-top: calc(0.9em - 0.5em);
 	outline: none;
 	text-align-last:center;
 	-webkit-appearance: none;
 	-moz-appearance: none;
-	appearance: none;	
+	appearance: none;
+	padding:0 2em 0 2em;	
 }
-
-#otdels_select option{
-	font-size: 0.4em;
-}
-
 
 
 @media print{
