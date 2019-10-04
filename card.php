@@ -1,5 +1,11 @@
 <?php
 session_start();
+
+$user_agent = $_SERVER["HTTP_USER_AGENT"];
+if (strpos($user_agent, "MSIE") !== false){
+	header("location: wrong_browser.php");
+}
+
 if (!isset($_SESSION["ldap"])){
 	header("location: index.php");
 }
