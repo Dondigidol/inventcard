@@ -34,7 +34,7 @@ function getItem(itemName){
 function otdelChange(){
 	if (document.getElementById("otdels_select")){
 		if (document.getElementById("otdels_select").value == ""){
-			document.getElementById("otdelCont").style.background = "rgba(255,0,0,0.3)";
+			document.getElementById("otdelCont").style.background = "rgba(255,0,0,0.2)";
 		} else {
 			document.getElementById("otdelCont").style.background = "transparent";
 		}	
@@ -135,7 +135,7 @@ function lostFocus(pos){
 	}
 	
 	if ((skuInput[pos].value != "" || lmInput[pos].value != "") && kolInput[pos].value == ""){
-		kolInput[pos].style.background="rgba(255,0,0,0.3)";
+		kolInput[pos].style.background="rgba(255,0,0,0.2)";
 	} else {
 		kolInput[pos].style.background="transparent";
 	}
@@ -159,7 +159,7 @@ function clearItem(pos){
 function checkKol(){
 	for (i=0; i<=2; i++){
 		if ((lmLabel[i].innerHTML != "" || skuLabel[i].innerHTML != "") && kolInput[i].value == ""){
-			kolInput[i].style.background="rgba(255,0,0,0.3)";
+			kolInput[i].style.background="rgba(255,0,0,0.2)";
 		} else {
 			kolInput[i].style.background="transparent";
 		}
@@ -169,7 +169,7 @@ function checkKol(){
 function checkInputs(input){
 	var val = $("#" +input).val();
 	if (val == ""){
-		$("#" + input).css("background","rgba(255,0,0,0.3)");
+		$("#" + input).css("background","rgba(255,0,0,0.2)");
 	} else {
 		$("#" + input).css("background","transparent");
 	}

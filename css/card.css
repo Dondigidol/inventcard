@@ -83,7 +83,7 @@ body {
 }
 
 .header_inputs{
-	background: rgba(255,0,0,0.3);
+	background: rgba(255,0,0,0.2);
 	padding: 0.1em 0;
 	outline: none;
 }
@@ -191,7 +191,7 @@ body {
 }
 
 #otdels_select{
-	width:5em;
+	width:6em;
 	border: none;
 	font-size: 1em;
 	background-color: transparent;
@@ -200,7 +200,7 @@ body {
 	-webkit-appearance: none;
 	-moz-appearance: none;
 	appearance: none;
-	padding:0 2em 0 2em;	
+	padding:0 1.5em 0 2.5em;	
 }
 
 
