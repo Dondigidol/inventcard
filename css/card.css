@@ -117,7 +117,7 @@ body {
 	position: absolute;
 	border: 0px solid orange;
 	width: 100%;
-	height: 100%;
+	height: 95%;
 	top: 0;
 	left: 0;
 }
@@ -207,9 +207,9 @@ body {
 @media print{
 
 	#cardcont {
-	display: block;
-	margin-top: 0em;
-	overflow: hidden;
+		display: block;
+		margin-top: -1cm;
+		height: auto;
 	}
 
 	
@@ -220,14 +220,21 @@ body {
 		text-align: left;
 		line-height: 1.5em;
 		box-shadow: 0em 0em 0em;
-		overflow: hidden;
+	}
+	.tablescont2{
+		page-break-inside: avoid;
+		page-break-before: auto;
+		border: 0px;
+	}
+	
+	@page {
+		size: auto;
+		margin: 0.5cm -5cm 1cm;
 	}
 
 }
 
-@page {
-  margin: 0;
-}
+
 
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {

@@ -9,7 +9,6 @@ if (strpos($user_agent, "MSIE") !== false){
 if (!isset($_SESSION["ldap"])){
 	header("location: index.php");
 }
-$rows=16;
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html>
@@ -24,6 +23,17 @@ $rows=16;
 	<script type= "text/javascript" src= "js/card.js"></script>	
 	<script type= "text/javascript" src= "js/JsBarcode.all.min.js"></script>	
 	<script type= "text/javascript" src= "js/functions.js"></script>
+	
+
+	<script>
+		document.onclick = function(e){
+			<?php
+				if (!isset($_SESSION["ldap"])){
+					header("location: index.php");
+				}
+			?>
+		}		
+	</script>
 	<div id= "header" name= "header">		
 		<div id= "triangle" name="triangle"></div>
 		<div id= "logo" name="logo"></div>
@@ -77,87 +87,21 @@ $rows=16;
 				</tr>
 			</table>
 			<br>
-			<table class= "tables" width= "95%">
+			<table id="mainTable" class= "tables" width= "95%">
 				<tr class = "tableshead">
 					<td width= "5%">№</td><td width= "23%">код EAN</td><td width= "15%">код ЛМ</td><td width= "37%">наименование</td><td width= "10%">кол-во</td><td width="10%">Тип</td>
 				</tr>
-				
-				<?php
-					for($i = 0; $i<$rows; $i++){
-						
-						echo 	("<tr class = 'tablescont2'>
-									<td>" . ($i + 1) . "</td>
-									<td>
-										<svg id='barcode_" . $i . "' class='barcode'></svg>
-										<div id='sku_" . $i . "_label' class='skuLabel' onclick='editSku(" . $i . ");'></div>
-										<input type='number' id= 'sku_" . $i . "'  class='tab_article_input' onchange= 'getItemBySku(this.value, " . $i . ");' onkeyup = 'nextRow(event," . $i. ", " .$rows. ");' onfocusout = 'lostFocus(" . $i . ");' tabindex='" . ($tab + 2) . "'/>
-									</td>
-									<td>
-										<div id='lm_" . $i . "_label' class='lmLabel' onclick='editLm(" . $i . ");'></div>
-										<input type='number' id= 'lm_" . $i . "'  class='tab_article_input' onchange= 'getItemByLm(this.value, " . $i . ");' onfocusout = 'lostFocus(" . $i . ");' tabindex='" . ($tab + 1) . "'/>
-									</td>
-									<td>
-										<div id = 'name_" . $i . "_label'></div>
-									</td>
-									<td>
-										<input type='number' id= 'kol_" . $i . "' tabindex='" . ($tab + 3) . "' onfocusout = 'lostFocus(" . $i . ");'/>
-										
-									</td>
-									<td>
-										<select class='selectors' id='type_" . $i . "' onchange='lostFocus(" . $i . ");' tabindex='" . ($tab + 4) . "'>
-											<option value='empty' selected></option>
-											<option value=''>A</option>					
-										</select>
-										<div id = 'clear_" . $i . "' class = 'clearButton' onclick='clearItem(" . $i . ")'></div>
-									</td>
-									
-								</tr>");
-						$tab = $tab + 3;
-					}			
-				?>
+				<script>
+					for(i = 1; i<=rows; i++){
+						createRow();
+					}
+				</script>	
+
 			
 			</table>	
 		</div>
 	</div>
 <div id = "errorCont"></div>
 
-
-<script>
-	document.onclick = function(e){
-		<?php
-			if (!isset($_SESSION["ldap"])){
-				header("location: index.php");
-			}
-		?>
-	}	
-	var lmLabel = [];
-	var lmInput = [];
-	var skuLabel = [];
-	var skuInput = [];
-	var barcode = [];
-	var kolInput = [];
-	var typeSelection = [];
-	var nameLabel = [];
-	
-	window.addEventListener('load', loadVariables, false);
-	
-	function loadVariables(){
-		<?php
-			for ($i=0; $i<$rows; $i++){
-				echo "lmLabel[" . $i . "] = document.getElementById('lm_" . $i . "_label');";
-				echo "lmInput[" . $i . "] = document.getElementById('lm_" . $i . "');";
-				echo "skuLabel[" . $i . "] = document.getElementById('sku_" . $i . "_label');";
-				echo "skuInput[" . $i . "] = document.getElementById('sku_" . $i . "');";
-				echo "barcode[" . $i . "] = document.getElementById('barcode_" . $i . "');";
-				echo "kolInput[" . $i . "] = document.getElementById('kol_" . $i . "');";
-				echo "typeSelection[". $i . "] = document.getElementById('type_" .$i. "');";
-				echo "nameLabel[" . $i . "] = document.getElementById('name_" . $i . "_label');";
-			}
-		?>
-	}
-	
-	
-	
-</script>
 </body>
 </html>

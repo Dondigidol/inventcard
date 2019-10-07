@@ -14,7 +14,7 @@ if (isset($_POST["lm"])){
 	$result=$conn->getItem($_POST["sku"]);
 }
 
-if (count($result) > 0){
+if ($result != null && array_key_exists(0, $result)){
 	$result = $result[0][0] . "|" . $result[0][1] . "|" . $result[0][2];
 } else {
 	$result = "||";
