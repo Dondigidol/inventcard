@@ -7,12 +7,18 @@ class ldap_connection
 	var $user;
 	var $dn;
 	
-	function get_params($ini_file)
+	function get_params($ini_file, $str)
 	{
 		$params_arr = parse_ini_file($ini_file);
-		isset($params_arr['ldap_server']) ? $this->server = $params_arr['ldap_server'] : die('В файле конфигурации нет данных о ldap-сервере');
-		isset($params_arr['ldap_port']) ? $this->port = $params_arr['ldap_port'] : die('В файле конфигурации нет данных о порте ldap-сервера');
-		isset($params_arr['ldap_dn']) ? $this->dn = $params_arr['ldap_dn'] : die('В файле конфигурации нет данных о структуре ldap-сервера');
+		if ($str=='ru'){			
+			isset($params_arr['ldap_server']) ? $this->server = $params_arr['ldap_server'] : die('В файле конфигурации нет данных о ldap-сервере');
+			isset($params_arr['ldap_port']) ? $this->port = $params_arr['ldap_port'] : die('В файле конфигурации нет данных о порте ldap-сервера');
+			isset($params_arr['ldap_dn']) ? $this->dn = $params_arr['ldap_dn'] : die('В файле конфигурации нет данных о структуре ldap-сервера');
+		} elseif($str=='kz'){
+			isset($params_arr['ldap_server_kz']) ? $this->server = $params_arr['ldap_server_kz'] : die('В файле конфигурации нет данных о ldap-сервере');
+			isset($params_arr['ldap_port_kz']) ? $this->port = $params_arr['ldap_port_kz'] : die('В файле конфигурации нет данных о порте ldap-сервера');
+			isset($params_arr['ldap_dn_kz']) ? $this->dn = $params_arr['ldap_dn_kz'] : die('В файле конфигурации нет данных о структуре ldap-сервера');
+		}
 	}
 	
 	function set_connection()
@@ -160,7 +166,11 @@ class postgre_connection{
 function connect_to_ldap($user, $userPW, $ini_file)
 {
 	$ldap = new ldap_connection;
-	$ldap->get_params($ini_file);
+	if (substr($user, 1)=='3'){
+		$ldap->get_params($ini_file, 'kz');
+	} else {
+		$ldap->get_params($ini_file, 'ru');
+	}	
 	$ldap->set_connection();
 	$ldap->set_bind($user, $userPW);
 	return $ldap->get_result();
