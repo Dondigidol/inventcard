@@ -78,7 +78,7 @@ if (!isset($_SESSION["ldap"])){
 				<tr class="tablescont">
 					<td>Сотрудник: <?php echo $_SESSION["username"];?></td>
 					<td class="head_table_sep">№ Листа:</td>
-					<td><input type="text" id="pageNumber"class="header_inputs" onkeyup="checkInputs(this.id);"/></td>
+					<td id="pageNumber1">1 из 1</td>
 				</tr>
 				<tr class="tablescont">
 					<td>Контролирующий:</td>
@@ -88,9 +88,14 @@ if (!isset($_SESSION["ldap"])){
 			</table>
 			<br>
 			<table id="mainTable" class= "tables" width= "95%">
-				<tr class = "tableshead">
-					<td width= "5%">№</td><td width= "23%">код EAN</td><td width= "15%">код ЛМ</td><td width= "37%">наименование</td><td width= "10%">кол-во</td><td width="10%">Тип</td>
-				</tr>
+				<tr class="tablescontHeader">
+						<td class="pos">№</td>
+						<td class="sku">код EAN</td>
+						<td class="lm">код ЛМ</td>
+						<td class="name">наименование</td>
+						<td class="kol">кол-во</td>
+						<td class="type">тип</td>
+					</tr>
 				<script>
 					for(i = 1; i<=rows; i++){
 						createRow();

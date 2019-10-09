@@ -1,7 +1,9 @@
 var rows = 16;
+var rows2 = 19;
 
 document.onready = function(){
 	otdelChange();
+	
 }
 
 
@@ -45,26 +47,26 @@ function otdelChange(){
 function createRow(){
 	rowId=getMaxRowId()+1;
 	rowPos=getMaxRowPos()+1;
-	//rows = getRowsCount();
+		
 	var tr = "<tr id='row" + rowId + "' class = 'tablescont2'>" +
-							"<td id='pos" + rowId + "'>" + rowPos + "</td>" +
-							"<td>" +
+							"<td id='pos" + rowId + "' class='pos'>" + rowPos + "</td>" +
+							"<td class='sku'>" +
 								"<svg id='barcode_" + rowId + "' class='barcode' style='visibility: visible;'></svg>" +
 								"<div id='sku_" + rowId + "_label' class='skuLabel' onclick='editSku(" + rowId + ");'></div>" + 
 								"<input type='number' id= 'sku_" + rowId + "'  class='tab_article_input' onchange= 'getItemBySku(this.value, " + rowId + ");' onkeyup = 'nextSkuRow(event," + rowId + ");' onfocusout = 'lostFocus(" + rowId + ");' tabindex='" + (rowPos*4) + "'/>" +
 							"</td>" +
-							"<td>" +
+							"<td class='lm'>" +
 								"<div id='lm_" + rowId + "_label' class='lmLabel' onclick='editLm(" + rowId + ");'></div>" +
 								"<input type='number' id= 'lm_" + rowId + "'  class='tab_article_input' onchange= 'getItemByLm(this.value, " + rowId + ");' onkeyup = 'nextLmRow(event," + rowId + ");' onfocusout = 'lostFocus(" + rowId + ");' tabindex='" + (rowPos*4+1) + "'/>" +
 							"</td>" +
-							"<td>" +
+							"<td class='name'>" +
 								"<div id = 'name_" + rowId + "_label'></div>" +
 							"</td>" +
-							"<td>" +
+							"<td class='kol'>" +
 								"<input type='number' id= 'kol_" + rowId + "' onfocusout = 'lostFocus(" + rowId + ");' onkeyup = 'nextKolRow(event," + rowId + ");' tabindex='" + (rowPos*4+2) + "'/>" +
 								
 							"</td>" +
-							"<td>" +
+							"<td class='type'>" +
 								"<select class='selectors' id='type_" + rowId + "' onchange='lostFocus(" + rowId + ");' tabindex='" + (rowPos*4+3) + "'>" +
 									"<option value='empty' selected></option>" +
 									"<option value=''>A</option>" +
@@ -74,7 +76,46 @@ function createRow(){
 							
 						"</tr>";	
 	$("#mainTable").append(tr);
-	//console.log("текущая позиция: " + rowPos + ", всего позиций: " + getMaxRowPos());
+	addHeaders();
+	changePageNumber();
+}
+
+function addHeaders(){
+	$(".pageCount").each(function(){
+		$(this).remove();
+	});
+	$(".tablescont2Header").each(function(){
+		$(this).remove();
+	});	
+	
+	if (getMaxRowPos()>rows)
+		i=1;
+		pageRows = rows;
+		$(".tablescont2").each(function(){
+			var rowId=$(this).attr("id").split("row")[1];
+			var rowPos=$("#pos"+rowId).html();
+			if (rowPos%pageRows===0 && rowPos<getMaxRowPos()){
+				var tr="<tr id='pageCount"+(i + 1)+"' class='pageCount'>"+
+							"<td class='address'>Адрес</td>" +
+							"<td class='addressVal'></td>" +
+							"<td class='page'>Лист</td>" +
+							"<td id='pageNumber"+(i + 1)+"' class='pageVal'></td>" +
+						"</tr>"+
+						"<tr id='#headerRow"+ (i + 1) +"' class='tablescont2Header'>" + 
+							"<td class='pos'>№</td>" +
+							"<td class='sku'>код EAN</td>" +
+							"<td class='lm'>код ЛМ</td>" +
+							"<td class='name'>наименование</td>" +
+							"<td class='kol'>кол-во</td>" +
+							"<td class='type'>тип</td>" +
+						"</tr>";
+				i++;
+				$(tr).insertAfter($("#row"+rowId));
+				pageRows = pageRows + rows2;
+			}
+		});	
+			
+	changePageNumber();
 }
 	
 function nextSkuRow(event,row){
@@ -144,6 +185,22 @@ function getMaxRowId(){
 	});
 	return parseInt(max);
 }
+
+function getPageCount(){
+	return Math.ceil(Math.ceil((getMaxRowPos()-rows)/rows2))+1;
+
+}
+
+function changePageNumber(){
+	var pageCount = getPageCount();
+	$("#pageNumber1").html("1 из " + pageCount);
+	$('.pageCount').each(function(){
+		var id = $(this).attr("id").split("pageCount")[1];
+		$("#pageNumber"+id).html(id + " из " + pageCount);
+	});
+}
+
+
 
 function getRowsCount(){
 	var rowsCount = $(".tablescont2").length;
@@ -262,20 +319,21 @@ function clearItem(pos){
 		$("#kol_"+pos).css("background","transparent");
 		$("#clear_" + pos).css("display","none");
 	} else {
-		//$("#row"+pos).remove();
 		remove(pos);
 	}
 }
 
 function remove(pos){
+	
 	$("#row"+pos).remove();
 	var i=1;
+	var pageCount = parseInt(getMaxRowPos()/rows+1);
 	$(".tablescont2").each(function(){
 		var rowNum = ($(this).attr('id')).split("row")[1];
 		$("#pos" + rowNum).html(i);
 		i++
 	});
-	
+	addHeaders();
 }
 	
 function checkKol(){
@@ -290,6 +348,7 @@ function checkKol(){
 
 function checkInputs(input){
 	var val = $("#" +input).val();
+	$(".addressVal").html($("#addressNumber").val());
 	if (val == ""){
 		$("#" + input).css("background","rgba(255,0,0,0.2)");
 	} else {

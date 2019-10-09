@@ -117,8 +117,8 @@ body {
 	position: absolute;
 	border: 0px solid orange;
 	width: 100%;
-	height: 95%;
-	top: 0;
+	height: 90%;
+	top: 2px;
 	left: 0;
 }
 
@@ -152,6 +152,9 @@ body {
 	border-left: 1px solid black;
 }
 
+#pageNumber1{
+	text-align: center;
+}
 
 .tablescont2 td{
 	border: 1px solid black;
@@ -159,6 +162,37 @@ body {
 	height: 3.7em;
 	text-align:center;
 	position: relative;
+	padding: 0.1em;
+}
+.tablescontHeader{
+	display: table-tr;
+}
+
+.tablescont2Header{
+	display:none;
+}
+
+.pageCount{
+	display: none;
+}
+
+.pos{
+	width:0.8cm;
+}
+.sku{
+	width:3.7cm;
+}
+.lm{
+	width:2.4cm;
+}
+.name{
+	width:5.9cm;
+}
+.kol{
+	width:1.6cm;
+}
+.type{
+	width:1.6cm;
 }
 
 .selectors{
@@ -211,7 +245,49 @@ body {
 		margin-top: -1cm;
 		height: auto;
 	}
+	
+	.pageCount{
+		display: block;
+		page-break-before: always;
+		border: 1px solid black;
+	}
+	
+	.address{
+		width:2cm;
+		text-align: center;
+	}
+	.addressVal{
+		width:10cm;
+		padding-left:1cm;
+		text-align: left;
+	}
+	.page{
+		width:2cm;
+		text-align: left;
+	}
+	.pageVal{
+		width:2cm;
+		text-align: center;
+	}
 
+	.pos{
+		width:0.8cm;
+	}
+	.sku{
+		width:3.7cm;
+	}
+	.lm{
+		width:2.4cm;
+	}
+	.name{
+		width:5.9cm;
+	}
+	.kol{
+		width:1.6cm;
+	}
+	.type{
+		width:1.6cm;
+	}
 	
 	#card {
 		margin: 0 auto;
@@ -221,16 +297,30 @@ body {
 		line-height: 1.5em;
 		box-shadow: 0em 0em 0em;
 	}
+	
 	.tablescont2{
+		display:block;
+		width: 16cm;
+		background: yellow;
 		page-break-inside: avoid;
-		page-break-before: auto;
-		border: 0px;
+		margin-top: -1px;
+	}
+	
+	.tablescontHeader{
+		display: block;
+	}
+	
+	.tablescont2Header{
+		display:block;
+		width: 16cm;
+		page-break-inside: avoid;
 	}
 	
 	@page {
 		size: auto;
-		margin: 0.5cm -5cm 1cm;
+		margin: 5mm 0 0;
 	}
+
 
 }
 
