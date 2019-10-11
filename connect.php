@@ -32,10 +32,9 @@ class ldap_connection
 		if (isset($this->conn))
 		{
 			ldap_set_option($this->conn, LDAP_OPT_PROTOCOL_VERSION, 3);
-			ldap_bind($this->conn, "ru1000\\".$user, $userPW) or die('Ошибка! Невреный логин или пароль!');		
+			ldap_bind($this->conn, $user, $userPW) or die('Ошибка! Невреный логин или пароль!');		
 		}
-		else die('Подключение не создано!');
-		
+		else die('Подключение не создано!');		
 	}
 	
 	function get_result()
@@ -166,13 +165,15 @@ class postgre_connection{
 function connect_to_ldap($user, $userPW, $ini_file)
 {
 	$ldap = new ldap_connection;
-	if (substr($user, 1)=='3'){
-		$ldap->get_params($ini_file, 'kz');
-	} else {
+	if (substr($user, 0, 1)=='6'){
 		$ldap->get_params($ini_file, 'ru');
+		$user2="ru1000\\".$user;
+	} else {
+		$ldap->get_params($ini_file, 'kz');
+		$user2="kz1000\\".$user;
 	}	
 	$ldap->set_connection();
-	$ldap->set_bind($user, $userPW);
+	$ldap->set_bind($user2, $userPW);
 	return $ldap->get_result();
 }
 
