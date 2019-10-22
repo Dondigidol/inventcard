@@ -403,8 +403,9 @@ function getCard(cardId){
 		success: function(data){
 			
 			var result=[];
-			result = JSON.parse(data);
-			if(result.length>0){
+			
+			if(data.length>0){
+				result = JSON.parse(data);
 				if (result.length>rows){
 					var arrRows = result.length-rows;
 					var i=0;

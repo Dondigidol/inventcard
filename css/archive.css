@@ -9,6 +9,30 @@ body {
 	padding-right: 1em;
 }
 
+#buttonsBlock {
+	position: absolute;
+	top: 4.5em;
+	left: 3.7em;
+}
+
+.menuButtons {
+	margin-bottom:1em;
+	width: 2.5em;
+	height: 2.5em;
+	min-height: 1em;
+	min-width: 1em;
+}
+
+#createNewButton{
+	background: url(../img/new.png) no-repeat;
+	background-size: auto 100%;
+}
+
+#createNewButton:hover{
+	border-radius: 0.5em;
+	background-color: rgba(100,100,100,0.2);	
+}
+
 #cardcont {
 	display: block;
 	height: calc(100vh - 8em);

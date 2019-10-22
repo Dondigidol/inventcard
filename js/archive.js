@@ -30,8 +30,9 @@ function getCards(){
 		data: {"cardId": cardId, "date": date, "username": username, "department": department, "address": address},
 		success: function(data){
 			var result=[];
-			result = JSON.parse(data);
-			if(result.length>0){
+			console.log(data);
+			if(data.length>0){
+				result = JSON.parse(data);
 				var i=1;
 				while(i<=result.length){
 					if(i%2==0){
@@ -56,5 +57,5 @@ function getCards(){
 }
 
 function loadCard(cardId){
-	window.location.href="/card.php?cardId="+cardId;
+	window.location.href="card.php?cardId="+cardId;
 }

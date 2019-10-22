@@ -51,8 +51,8 @@ if (!isset($_SESSION["ldap"])){
 		<div id="buttonsBlock">			
 			<div id= "printButton" onclick = "saveCard(); window.print();" class = "menuButtons" title="Распечатать"></div>
 			<div id= "clearButton" onclick = "clearCard();" class = "menuButtons" title="Очистить все поля"></div>
-			<div id= "createNewButton" onclick = "window.location='/card.php'" class = "menuButtons" title="Создать новую карточку"></div>
-			<div id= "archiveButton" onclick = "window.location='/archive.php'" class = "menuButtons" title="Архив карточек"></div>
+			<div id= "createNewButton" onclick = "window.location='card.php'" class = "menuButtons" title="Создать новую карточку"></div>
+			<div id= "archiveButton" onclick = "window.location='archive.php'" class = "menuButtons" title="Архив карточек"></div>
 		</div>
 		<a href= "index.php" id="logout" onclick= "logout();" >Выйти</a>
 	</div>

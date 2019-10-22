@@ -41,6 +41,9 @@ if (!isset($_SESSION["ldap"])){
 	<div id= "header" name= "header">		
 		<div id= "triangle" name="triangle"></div>
 		<div id= "logo" name="logo"></div>
+		<div id="buttonsBlock">			
+			<div id= "createNewButton" onclick = "window.location='card.php'" class = "menuButtons" title="Создать новую карточку"></div>
+		</div>
 		<a href= "index.php" id="logout" onclick= "logout();" >Выйти</a>
 	</div>
 	<div id= "cardcont" name= "cardcont">
