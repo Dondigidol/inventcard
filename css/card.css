@@ -38,7 +38,17 @@ body {
 	background-size: auto 100%;
 }
 
-#printButton:hover, #clearButton:hover {
+#createNewButton{
+	background: url(../img/new.png) no-repeat;
+	background-size: auto 100%;
+}
+
+#archiveButton{
+	background: url(../img/archive.png) no-repeat;
+	background-size: auto 100%;
+}
+
+#printButton:hover, #clearButton:hover, #createNewButton:hover, #archiveButton:hover {
 	border-radius: 0.5em;
 	background-color: rgba(100,100,100,0.2);	
 }
@@ -73,7 +83,7 @@ body {
 }
 
 .tables input[type=number], input[type=text], select{
-	width:95%;
+	width:90%;
 	height: 80%;
 	text-align: center;
 	font-size: 1em;
@@ -177,7 +187,7 @@ body {
 }
 
 .pos{
-	width:0.8cm;
+	width:0.7cm;
 }
 .sku{
 	width:3.7cm;
@@ -186,13 +196,18 @@ body {
 	width:2.4cm;
 }
 .name{
-	width:5.9cm;
+	width:6cm;
 }
 .kol{
 	width:1.6cm;
 }
 .type{
 	width:1.6cm;
+}
+
+.nameField{
+	word-wrap: break-word;
+	
 }
 
 .selectors{
@@ -271,22 +286,34 @@ body {
 	}
 
 	.pos{
-		width:0.8cm;
+		width:0.7cm;
+		max-width:0.7cm;
+		min-width:0.7cm;
 	}
 	.sku{
 		width:3.7cm;
+		max-width:3.7cm;
+		min-width:3.7cm;
 	}
 	.lm{
 		width:2.4cm;
+		max-width:2.4cm;
+		min-width:2.4cm;
 	}
 	.name{
-		width:5.9cm;
+		width:6cm;
+		max-width:6cm;
+		min-width:6cm;
 	}
 	.kol{
 		width:1.6cm;
+		max-width:1.6cm;
+		min-width:1.6cm;
 	}
 	.type{
 		width:1.6cm;
+		max-width:1.6cm;
+		min-width:1.6cm;
 	}
 	
 	#card {

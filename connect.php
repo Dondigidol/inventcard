@@ -41,7 +41,8 @@ class ldap_connection
 	{	
 		if (isset($this->conn) and isset($this->dn))
 		{
-			$result = ldap_search($this->conn, $this->dn, "(sAMAccountName=$this->user)") or die ("Ошибка поиска");
+			$user=explode("\\",$this->user)[1];
+			$result = ldap_search($this->conn, $this->dn, "(sAMAccountName=$user)") or die ("Ошибка поиска");
 			return ldap_get_entries($this->conn, $result);
 		}
 		else die('Подключение к ldap-серверу не готово!');
@@ -162,6 +163,112 @@ class postgre_connection{
 	}	
 }
 
+class mysql_connection
+{
+	var $server;
+	var $database;
+	var $user;
+	var $userPW;
+	var $conn;
+	var $store;
+	function get_params($ini_file)
+	{
+		$params_arr = parse_ini_file($ini_file);
+		isset($params_arr['mysql_server']) ? $this->server = $params_arr['mysql_server'] : die('В файле конфигурации нет данных о MySQL сервере');
+		isset($params_arr['mysql_database']) ? $this->database = $params_arr['mysql_database'] : die('В файле конфигурации нет данных о подключаемой базе MySQL сервера');
+		isset($params_arr['mysql_user']) ? $this->user = $params_arr['mysql_user'] : die('В файле конфигурации нет данных о логине подключения к MySQL серверу');
+		isset($params_arr['mysql_password']) ? $this->userPW = $params_arr['mysql_password'] : die('В файле конфигурации нет данных о пароле подключения к MySQL серверу');
+	}
+	
+	function set_connection()
+	{
+		$this->conn = mysqli_connect($this->server, $this->user, $this->userPW, $this->database) or die("Невозможно подключиться к серверу MySQL!");
+		//mysqli_query($this->conn, "SET NAMES 'utf8'");
+		//ini_set('max_execution_time', 720);
+		return $this->conn;
+	}
+	
+	function checkTable($tableName){
+		$this->store=$tableName;
+		$query="CREATE TABLE IF NOT EXISTS `inventcard`.`".$tableName."` (
+				    `id` int(11) NOT NULL AUTO_INCREMENT,
+					  `card_id` VARCHAR(40) NOT NULL,
+					  `date` VARCHAR(10) NOT NULL,
+					  `user_name` varchar(60) NOT NULL,
+					  `department` varchar(2) DEFAULT NULL,
+					  `address` VARCHAR(40),
+					  `box` VARCHAR(40),
+					  `position` VARCHAR(11) NOT NULL,
+					  `sku` varchar(13) DEFAULT NULL,
+					  `lm` varchar(8) DEFAULT NULL,
+					  `name` varchar(255) DEFAULT NULL,
+					  `kol` varchar(15) DEFAULT NULL,
+					  `type` varchar(10) DEFAULT NULL,
+					  PRIMARY KEY (`id`));";				  
+		mysqli_query($this->conn, $query);
+	}
+	
+	function addItem($card_id, $date, $username, $department, $address, $box, $position, $sku, $lm, $name, $kol, $type){
+		$store=$this->store;
+		$query="INSERT INTO `inventcard`.`".$store."`
+				(`card_id`,
+				`date`,
+				`user_name`,
+				`department`,
+				`address`,
+				`box`,
+				`position`,
+				`sku`,
+				`lm`,
+				`name`,
+				`kol`,
+				`type`)
+				VALUES
+				('".$card_id."',
+				'".$date."',
+				'".$username."',
+				'".$department."',
+				'".$address."',
+				'".$box."',
+				'".$position."',
+				'".$sku."',
+				'".$lm."',
+				'".$name."',
+				'".$kol."',
+				'".$type."');";				
+		mysqli_query($this->conn, $query);
+	}
+	
+	function clearCard($card_id){
+		$store=$this->store;
+		mysqli_query($this->conn, "SET SQL_SAFE_UPDATES = 0");
+		$query="DELETE FROM `inventcard`.`".$store."`
+				WHERE `card_id` = '".$card_id."'";
+		mysqli_query($this->conn, $query);
+		mysqli_query($this->conn, "SET SQL_SAFE_UPDATES = 1");
+	}
+	
+	function getCard($card_id){
+		$store=$this->store;
+		$result=Array();
+		$query="SELECT * FROM `inventcard`.`".$store."`
+				WHERE `card_id`='".$card_id."'
+				order by id";
+		$result=mysqli_query($this->conn, $query);
+		return($result);
+	}
+	
+	function getCards($cardId, $date, $username, $department, $address){
+		$store=$this->store;
+		$result=Array();
+		$query="SELECT `card_id`, `date`, `user_name`, `department`, `address` FROM `inventcard`.`".$store."`
+				WHERE `card_id` LIKE '%".$cardId."%' and `date` LIKE '%".$date."%' and `user_name` LIKE '%".$username."%' and `department` LIKE '%".$department."%' and `address` LIKE '%".$address."%'
+				group by `card_id`, `date`, `user_name`, `department`, `address`";
+		$result=mysqli_query($this->conn, $query);
+		return($result);
+	}
+}
+
 function connect_to_ldap($user, $userPW, $ini_file)
 {
 	$ldap = new ldap_connection;
@@ -183,6 +290,14 @@ function connect_to_mssql($ini_file)
 	$mssql->get_params($ini_file);
 	$mssql->set_connection();
 	return $mssql;
+}
+
+function connect_to_mysql($ini_file)
+{
+	$mysql = new mysql_connection;
+	$mysql->get_params($ini_file);
+	$mysql->set_connection();
+	return $mysql;
 }
 
 function connect_to_postgre($ini_file)

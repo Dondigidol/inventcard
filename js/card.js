@@ -12,6 +12,7 @@ function logout(){
 		type: "POST",
 		url: "aj/logout.php",
 		success: function(data){
+			window.location.href = '/index.php';
 			if (data.length>0){
 				$("#alerts").html(data);
 			}
@@ -37,7 +38,7 @@ function getItem(itemName){
 }
 
 function otdelChange(){
-	if ($("#otdels_select").val() == ""){
+	if ($("#otdels_select").val() == " "){
 		$("#otdelCont").css("background", "rgba(255,0,0,0.2)");
 	} else {
 		$("#otdelCont").css("background", "transparent");
@@ -60,7 +61,7 @@ function createRow(){
 								"<input type='number' id= 'lm_" + rowId + "'  class='tab_article_input' onchange= 'getItemByLm(this.value, " + rowId + ");' onkeyup = 'nextLmRow(event," + rowId + ");' onfocusout = 'lostFocus(" + rowId + ");' tabindex='" + (rowPos*4+1) + "'/>" +
 							"</td>" +
 							"<td class='name'>" +
-								"<div id = 'name_" + rowId + "_label'></div>" +
+								"<div id = 'name_" + rowId + "_label' class='nameField'></div>" +
 							"</td>" +
 							"<td class='kol'>" +
 								"<input type='number' id= 'kol_" + rowId + "' onfocusout = 'lostFocus(" + rowId + ");' onkeyup = 'nextKolRow(event," + rowId + ");' tabindex='" + (rowPos*4+2) + "'/>" +
@@ -68,8 +69,8 @@ function createRow(){
 							"</td>" +
 							"<td class='type'>" +
 								"<select class='selectors' id='type_" + rowId + "' onchange='lostFocus(" + rowId + ");' tabindex='" + (rowPos*4+3) + "'>" +
-									"<option value='empty' selected></option>" +
-									"<option value=''>A</option>" +
+									"<option value=' ' selected></option>" +
+									"<option value='A'>A</option>" +
 								"</select>" +
 								"<div id = 'clear_" + rowId + "' class = 'clearButton' onclick='clearItem(" + rowId + ")'></div>" +
 							"</td>" +
@@ -290,13 +291,13 @@ function lostFocus(pos){
 	$("#sku_"+pos+"_label").css("visibility","visible");
 	$("#lm_"+pos+"_label").css("visibility","visible");
 	$("#barcode_"+pos).css("visibility","visible");
-	if ($("#sku_"+pos).val() != "" || $("#lm_"+pos).val() != "" || $("#kol_"+pos).val() != "" || $("#type_"+pos).val() != "empty"){
+	if ($("#sku_"+pos).val() != "" || $("#sku_"+pos+"_label").html() != "" || $("#lm_"+pos+"_label").html() != "" || $("#lm_"+pos).val() != "" || $("#kol_"+pos).val() != "" || $("#type_"+pos).val() != " "){
 		$("#clear_" + pos).css("display","block");
 	} else{
 		$("#clear_" + pos).css("display","none");
 	}
 	
-	if (($("#sku_"+pos).val() != "" || $("#lm_"+pos).val() != "") && $("#kol_"+pos).val() == ""){
+	if (($("#sku_"+pos).val() != "" || $("#sku_"+pos+"_label").html() != "" || $("#lm_"+pos+"_label").html() != "" || $("#lm_"+pos).val() != "") && $("#kol_"+pos).val() == ""){
 		$("#kol_"+pos).css("background","rgba(255,0,0,0.2)");
 	} else {
 		$("#kol_"+pos).css("background","transparent");
@@ -349,9 +350,97 @@ function checkKol(){
 function checkInputs(input){
 	var val = $("#" +input).val();
 	$(".addressVal").html($("#addressNumber").val());
-	if (val == ""){
+	if (val.length==0){
 		$("#" + input).css("background","rgba(255,0,0,0.2)");
 	} else {
 		$("#" + input).css("background","transparent");
 	}
+}
+
+function saveCard(){
+	var arr = [];	
+	var i=0;
+	var cardId = $("#cardId").html();
+	$(".tablescont2").each(function(){
+		var rowId = $(this).attr("id").split("row")[1];
+		var sku = $("#sku_"+rowId+"_label").html();
+		var lm = $("#lm_"+rowId+"_label").html();
+		
+		if (sku>0 || lm.length>0){
+			var arr2 = [];			
+			arr2[0] = $("#cardId").html();
+			arr2[1] = $("#changingDate").html();
+			arr2[2] = $("#otdels_select").val();
+			arr2[3] = $("#addressNumber").val();
+			arr2[4] = $("#boxNumber").val();
+			arr2[5] = $("#pos"+rowId).html();
+			arr2[6] = sku;
+			arr2[7] = lm;
+			arr2[8] = $("#name_"+rowId+"_label").html();
+			arr2[9] = $("#kol_"+rowId).val();
+			arr2[10] = $("#type_"+rowId).val();
+			
+			arr[i]= arr2;
+			i++;
+		}
+	});
+	$.ajax({
+		type: "POST",
+		url: "aj/saveCard.php",
+		data: {"rows": arr, "cardId": cardId},
+		success: function(data){
+			//console.log(data);
+		}		
+	});
+}
+
+function getCard(cardId){
+	var result=[];
+	$.ajax({
+		type: "POST",
+		url: "aj/getCard.php",
+		data: {"cardId": cardId},
+		success: function(data){
+			
+			var result=[];
+			result = JSON.parse(data);
+			if(result.length>0){
+				if (result.length>rows){
+					var arrRows = result.length-rows;
+					var i=0;
+					while(i<=arrRows){
+						createRow();
+						i++;
+					}
+				}
+				var i=1;
+				$("#otdels_select").val(result[0]["department"]);
+				$("#addressNumber").val(result[0]["address"]);
+				$("#boxNumber").val(result[0]["box"]);
+				otdelChange();
+				checkInputs('addressNumber');
+				checkInputs('boxNumber');
+				while(i<=result.length){
+					$("#sku_"+i+"_label").html(result[i-1]["sku"]);
+					JsBarcode("#barcode_"+i, result[i-1]["sku"], {
+						width: 1.5,
+						height: 30,
+						font: "Helvetica"					
+					});
+					$("#lm_"+i+"_label").html(result[i-1]["lm"]);
+					$("#name_"+i+"_label").html(result[i-1]["name"]);
+					$("#kol_"+i).val(result[i-1]["kol"]);
+					$("#type_"+i).val(result[i-1]["type"]);
+					lostFocus(i);
+					i++; 
+				}
+			}
+		}
+	});	
+}
+
+function clearCard(){
+	$(".tablescont2").each(function(){
+		clearItem($(this).attr("id").split("row")[1]);
+	});
 }
