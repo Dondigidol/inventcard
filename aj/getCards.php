@@ -16,9 +16,13 @@ $address=$_POST["address"];
 $arr=Array();
 		
 $result=$mysql->getCards($cardId, $date, $username, $department, $address);
-foreach($result as $row){
+
+if (!empty($result)){
+	foreach($result as $row){
 	$arr[]=$row;
+	}
 }
+
 
 
 $json=json_encode($arr);

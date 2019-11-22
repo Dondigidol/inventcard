@@ -224,11 +224,20 @@ function getItemBySku(sku, pos){
 			$("#lm_"+pos+"_label").html(data[1]);
 			$("#sku_"+pos+"_label").html(data[0]);
 			if (data[0] != "") {
-				JsBarcode("#barcode_" + pos, data[0], {
-					width: 1.5,
-					height: 30,
-					font: "Helvetica"					
-				});
+				if(data[0].length == 13){
+					JsBarcode("#barcode_" + pos, data[0], {
+						format: "EAN13",
+						width: 1.5,
+						height: 30,
+						font: "Helvetica"					
+					});
+				} else {
+					JsBarcode("#barcode_" + pos, data[0], {
+						width: 1.5,
+						height: 30,
+						font: "Helvetica"					
+					});
+				}
 				if (pos == getMaxRowId()){
 					createRow();
 					editSku(getNext(pos));
@@ -251,20 +260,32 @@ function getItemByLm(lm, pos){
 			data = data.split("|");
 			if (data[1] == ""){
 				data[1] = lm;
-				if (pos == getMaxRowId()){
-					createRow();
-					editLm(getNext(pos));
-				}
 			}
 			$("#lm_"+pos+"_label").html(data[1]);
 			$("#sku_"+pos+"_label").html(data[0]);
 			if (data[0] != "") {
-				JsBarcode("#barcode_" + pos, data[0], {
-					width: 1.5,
-					height: 30,
-					font: "Helvetica"					
-				});
-			}			
+				if(data[0].length == 13){
+					JsBarcode("#barcode_" + pos, data[0], {
+						format: "EAN13",
+						width: 1.5,
+						height: 30,
+						font: "Helvetica"					
+					});
+				} else {
+					JsBarcode("#barcode_" + pos, data[0], {
+						width: 1.5,
+						height: 30,
+						font: "Helvetica"					
+					});
+				}
+				
+			}
+			if (data[1] != ""){
+				if (pos == getMaxRowId()){
+					createRow();
+					editLm(getNext(pos));
+				}
+			}				
 			$("#name_"+pos+"_label").html(data[2]);				
 		}
 	});
@@ -370,15 +391,16 @@ function saveCard(){
 			var arr2 = [];			
 			arr2[0] = $("#cardId").html();
 			arr2[1] = $("#changingDate").html();
-			arr2[2] = $("#otdels_select").val();
-			arr2[3] = $("#addressNumber").val();
-			arr2[4] = $("#boxNumber").val();
-			arr2[5] = $("#pos"+rowId).html();
-			arr2[6] = sku;
-			arr2[7] = lm;
-			arr2[8] = $("#name_"+rowId+"_label").html();
-			arr2[9] = $("#kol_"+rowId).val();
-			arr2[10] = $("#type_"+rowId).val();
+			arr2[2] = sessionUser;
+			arr2[3] = $("#otdels_select").val();
+			arr2[4] = $("#addressNumber").val();
+			arr2[5] = $("#boxNumber").val();
+			arr2[6] = $("#pos"+rowId).html();
+			arr2[7] = sku;
+			arr2[8] = lm;
+			arr2[9] = $("#name_"+rowId+"_label").html();
+			arr2[10] = $("#kol_"+rowId).val();
+			arr2[11] = $("#type_"+rowId).val();
 			
 			arr[i]= arr2;
 			i++;
@@ -388,9 +410,9 @@ function saveCard(){
 		type: "POST",
 		url: "aj/saveCard.php",
 		data: {"rows": arr, "cardId": cardId},
-		success: function(data){
-			//console.log(data);
-		}		
+		error: function(data){
+			console.log(data);
+		}
 	});
 }
 
@@ -422,16 +444,40 @@ function getCard(cardId){
 				checkInputs('addressNumber');
 				checkInputs('boxNumber');
 				while(i<=result.length){
-					$("#sku_"+i+"_label").html(result[i-1]["sku"]);
-					JsBarcode("#barcode_"+i, result[i-1]["sku"], {
-						width: 1.5,
-						height: 30,
-						font: "Helvetica"					
-					});
-					$("#lm_"+i+"_label").html(result[i-1]["lm"]);
-					$("#name_"+i+"_label").html(result[i-1]["name"]);
-					$("#kol_"+i).val(result[i-1]["kol"]);
-					$("#type_"+i).val(result[i-1]["type"]);
+					if (result[i-1]["sku"] != ""){
+						var sku = result[i-1]["sku"];						
+						$("#sku_"+i+"_label").html(result[i-1]["sku"]);
+						if(sku.length == 13){
+							
+							JsBarcode("#barcode_"+i, sku, {
+								format: "EAN13",
+								width: 1.5,
+								height: 30,
+								font: "Helvetica"					
+							});
+						} else {
+							JsBarcode("#barcode_"+i, sku, {
+								width: 1.5,
+								height: 30,
+								font: "Helvetica"					
+							});
+						}
+						
+					}
+					
+					if(result[i-1]["lm"] != ""){
+						$("#lm_"+i+"_label").html(result[i-1]["lm"]);
+					}
+					if (result[i-1]["name"] != ""){
+						$("#name_"+i+"_label").html(result[i-1]["name"]);
+					}
+					if (result[i-1]["kol"] != ""){
+						$("#kol_"+i).val(result[i-1]["kol"]);
+					}
+					if (result[i-1]["type"] != ""){
+						$("#type_"+i).val(result[i-1]["type"]);
+					}
+					
 					lostFocus(i);
 					i++; 
 				}

@@ -30,7 +30,6 @@ function getCards(){
 		data: {"cardId": cardId, "date": date, "username": username, "department": department, "address": address},
 		success: function(data){
 			var result=[];
-			console.log(data);
 			if(data.length>0){
 				result = JSON.parse(data);
 				var i=1;

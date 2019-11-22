@@ -1,4 +1,7 @@
 <?php
+ini_set('session.gc_maxlifetime', 1800);
+ini_set('session.cookie_lifetime', 0);
+session_set_cookie_params(0);
 session_start();
 
 header('Cache-Control: no-cache, no-store, must-revalidate'); // HTTP 1.1.
@@ -37,6 +40,8 @@ if (!isset($_SESSION["ldap"])){
 	
 
 	<script>
+		var sessionUser= '<?= $_SESSION["username"];?>';
+	
 		document.onclick = function(e){
 			<?php
 				if (!isset($_SESSION["ldap"])){
@@ -49,7 +54,7 @@ if (!isset($_SESSION["ldap"])){
 		<div id= "triangle" name="triangle"></div>
 		<div id= "logo" name="logo"></div>
 		<div id="buttonsBlock">			
-			<div id= "printButton" onclick = "saveCard(); window.print();" class = "menuButtons" title="Распечатать"></div>
+			<div id= "printButton" onclick = "saveCard(); window.print();" class = "menuButtons" title="Печать"></div>
 			<div id= "saveButton" onclick = "saveCard();" class = "menuButtons" title="Сохранить карточку"></div>
 			<div id= "clearButton" onclick = "clearCard();" class = "menuButtons" title="Очистить все поля"></div>
 			<div id= "createNewButton" onclick = "window.location='card.php'" class = "menuButtons" title="Создать новую карточку"></div>
